@@ -4,6 +4,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 const Users = require("./models/userModel");
+const Posts = require("./models/postModel");
 
 const app = express();
 
@@ -22,6 +23,23 @@ mongoose.connect(MONGO_URL, (err) => {
     console.log(err);
   }
 });
+
+// const data = [
+//   {
+//     title: "Naslov1",
+//     description: "Opis1",
+//   }
+// ];
+
+// data.forEach(el => {
+//   const newData = new Posts({
+//     title: el.title,
+//     description: el.description
+
+//   });
+//   newData.save();
+// });
+
 // const data = [
 //   {
 //     username: "Baka",
@@ -37,6 +55,12 @@ mongoose.connect(MONGO_URL, (err) => {
 //     });
 //     newData.save();
 // });
+
+app.get("/posts", (req, res) => {
+  Posts.find({})
+    .then((item) => res.json(item))
+    .catch((err) => console.log(err))
+});
 
 app.post("/login", (req, res) => {
   const reqBody = req.body;
