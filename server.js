@@ -56,6 +56,48 @@ mongoose.connect(MONGO_URL, (err) => {
 //     newData.save();
 // });
 
+//delete post
+app.delete("/post/:id", (req, res) => {
+  Posts.deleteOne({ _id: req.params.id })
+    .then((item) => {
+      Projects.find({}, (err, result) => {
+        res.send(result);
+      });
+    })
+    .catch((err) => console.log(err));
+});
+
+
+//edit post
+app.patch("/post/:id", async (req, res) => {
+  try {
+    const updatePost= await Posts.updateOne(
+      { _id: req.params.id },
+      { $set: req.body }
+    );
+    res.status(200).json(updatePost);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+app.get("/post/:id", (req, res) => {
+  Posts.findOne({ _id: req.params.id })
+    .then((item) => res.json(item))
+    .catch((err) => console.log(err));
+});
+// add post
+app.post("/post", async (req, res) => {
+  let newPost = new Posts(req.body);
+  let addPost = await newPost.save();
+  if (addPost) {
+    res.send("Added new post");
+  } else {
+    res.send("Didn't add new post")
+  }
+  console.log(req.body);
+});
+
 app.get("/posts", (req, res) => {
   Posts.find({})
     .then((item) => res.json(item))
