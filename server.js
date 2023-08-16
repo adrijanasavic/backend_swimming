@@ -55,6 +55,12 @@ mongoose.connect(MONGO_URL, (err) => {
 //     });
 //     newData.save();
 // });
+//detail post
+app.get("/postdetail/:id", (req, res) => {
+  Posts.findOne({ _id: req.params.id })
+    .then((item) => res.json(item))
+    .catch((err) => console.log(err));
+});
 
 //delete post
 app.delete("/post/:id", (req, res) => {
@@ -71,7 +77,7 @@ app.delete("/post/:id", (req, res) => {
 //edit post
 app.patch("/post/:id", async (req, res) => {
   try {
-    const updatePost= await Posts.updateOne(
+    const updatePost = await Posts.updateOne(
       { _id: req.params.id },
       { $set: req.body }
     );
